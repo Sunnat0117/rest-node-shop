@@ -1,6 +1,7 @@
 const express = require('express')
 const productRouter = require('./api/routers/products')
 const ordersRouter = require('./api/routers/orders')
+const userRouter =  require('./api/routers/user')
 const morgan = require('morgan')
 const bodyParser =  require('body-parser')
 const mongoose = require('mongoose')
@@ -9,11 +10,12 @@ const env = require('dotenv').config()
 const app = express();
 
 //connection line to mongodb
-
+// console.log(process.env.MONGODB_PASSWORD)
 mongoose.connect(`mongodb+srv://Sunnat:${process.env.MONGODB_PASSWORD}@cluster0.xcdqp.mongodb.net/?retryWrites=true&w=majority`)
 
 //express USE statements
 app.use(morgan('dev'))
+// app.use('/uploads' , express.static('uploads'))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
@@ -35,6 +37,7 @@ app.use((req, res, next)=>{
 //ROUTERS
 app.use('/products', productRouter)
 app.use('/orders', ordersRouter)
+app.use('/user', userRouter)
 
 app.use((req, res, next)=>{
         const error = new Error('not found')
